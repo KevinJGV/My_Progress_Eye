@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Progress Eye</title>
     <script defer type="module" src="script.js"></script>
+    <link rel="shortcut icon" href="/assets/progress eye.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="flex_col">
     <header class="flex unselected all_c">
         <img src="/assets/progress eye.png" alt="logo" srcset="" draggable="false">
-        <h1 class="card">My Progress Eye</h1>
+        <div class="logo card relative">
+            <div class="load_bar_animation absolute"></div>
+            <h1 class="relative">My Progress Eye</h1>
+        </div>
     </header>
     <main class="flex all_c">
         <form action="https://66c79f4c732bf1b79fa710b8.mockapi.io/api/v1/auth" method="post" id="login" class="flex_col all_c card">

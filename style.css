@@ -1,20 +1,27 @@
 :root {
-    --PrimaryColor: #porsetear;
-    --SecondaryColor: #porsetear;
-    --TertiaryColor: #porsetear;
+    --font-color-sub: #666;
+    --bg-color: #f9fafb;
+    --main-color: #323232;
+    --main-lightcolor: #454545;
+    --main-hardcolor: #212121;
+    --main-focus: #3b82f6;
+    --highligts: #8b5df6;
 }
 
 * {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
     box-sizing: border-box;
-    transition: all 0.2s cubic-bezier(.22, .61, .36, 1);
+    transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-
-body, html {
+body,
+html {
     overflow-x: hidden;
-    background-color: #f9fafb;
-    background-image: linear-gradient(#e5e7eb 2px,#0000 0),linear-gradient(90deg,#e5e7eb 2px,#0000 0);
+    background-color: var(--bg-color);
+    background-image: linear-gradient(#e5e7eb 1px, #0000 0),
+        linear-gradient(90deg, #e5e7eb 1px, #0000 0);
     background-size: 100px 100px;
 }
 
@@ -107,7 +114,8 @@ a {
     transform: translateY(-50%);
 }
 
-.unselected, .unselected * {
+.unselected,
+.unselected * {
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -122,14 +130,15 @@ a {
     visibility: hidden;
 }
 
-button, .button {
+button,
+.button {
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: inherit;
-    color: #fff;
-    background-color: #212121;
+    color: var(--bg-color);
+    background-color: var(--main-color);
     border: none;
     width: 100%;
     padding: 12px 16px;
@@ -137,14 +146,18 @@ button, .button {
     gap: 8px;
     margin: 12px 0;
     cursor: pointer;
-    border-radius: 6px;
-    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.084), 0px 2px 3px rgba(0, 0, 0, 0.168);
+    border-radius: 10px;
+    box-shadow: 0px 4px 0 var(--main-hardcolor);
+    transition: none;
 }
 
-button:active, .button:active {
-    scale: 0.95;
-    background-color: #313131;
-  }
+button:active,
+.button:active {
+    transform: translateY(3px);
+    box-shadow: none;
+    /* scale: 0.95; */
+    background-color: var(--main-hardcolor);
+}
 
 header {
     gap: 1rem;
@@ -153,6 +166,11 @@ header {
 
 header img {
     width: 100px;
+}
+
+.logo h1 {
+    z-index: 1;
+    margin: 0;
 }
 
 main {
@@ -169,11 +187,7 @@ main {
 }
 
 .card {
-    --font-color: #323232;
-    --font-color-sub: #666;
-    --bg-color: #fff;
-    --main-color: #323232;
-    --main-focus: #2d8cf0;
+    overflow: hidden;
     background: var(--bg-color);
     border: 2px solid var(--main-color);
     box-shadow: 4px 4px var(--main-color);
@@ -183,5 +197,20 @@ main {
     justify-content: flex-start;
     padding: 20px;
     gap: 10px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
+}
+
+.load_bar_animation {
+    z-index: 0;
+    background-color: #3b82f6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+}
+
+.logo:hover .load_bar_animation {
+    right: 0%;
+}
