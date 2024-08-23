@@ -5,7 +5,8 @@
     --main-lightcolor: #454545;
     --main-hardcolor: #212121;
     --main-focus: #3b82f6;
-    --highligts: #8b5df6;
+    --highligt: #8b5df6;
+    --highligt-transparent: #8b5df685;
 }
 
 * {
@@ -182,8 +183,21 @@ main {
 }
 
 #login input {
+    background-image: url(https://www.svgrepo.com/show/532363/user-alt-1.svg);
+    background-repeat: no-repeat;
+    background-position: 10px;
+    background-size: 1rem;
     padding: 0.5rem;
+    padding-left: 2.3rem;
     font-size: 1rem;
+    border-radius: 2px;
+    border: var(--main-color) 0.1px solid;
+    transition: none;
+}
+
+input:focus {
+    border-color: var(--highligt) !important;
+    outline: var(--highligt-transparent) solid 3px;
 }
 
 .card {
