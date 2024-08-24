@@ -163,6 +163,7 @@ button:active,
 header {
     gap: 1rem;
     padding: 1rem;
+    flex-grow: .3;
 }
 
 header img {
@@ -228,3 +229,24 @@ input:focus {
 .logo:hover .load_bar_animation {
     right: 0%;
 }
+
+.sections {
+    gap: 0;
+    padding: 0;
+}
+
+.sections > * {
+    padding: 10px;
+    width: 60px;
+}
+
+.sections section:nth-child(1),
+.sections section:nth-child(2),
+.sections section:nth-child(3) {
+    flex-grow: 4;
+}
+
+.sections section:nth-child(4) {
+    flex-grow: 1;
+}
+

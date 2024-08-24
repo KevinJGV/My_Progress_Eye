@@ -1,22 +1,24 @@
 "use strict";
 
 const url = window.location;
-const BASE_URL_API =
-    "https://66c79f4c732bf1b79fa710b8.mockapi.io/api/v1/users/";
+const BASE_URL_API = "https://66c79f4c732bf1b79fa710b8.mockapi.io/api/v1/users";
 let user_session;
 
-async function enviarDatosAPI(datos, url) {
+async function enviarDatosAPI(url, datos) {
     const opciones = {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+            "content-type": "application/json",
         },
         body: JSON.stringify(datos),
     };
 
     try {
         const respuesta = await fetch(new Request(url, opciones));
+        console.log(respuesta);
+        alert();
         if (!respuesta.ok) throw new Error(respuesta.status);
+        console.log("ENVIADO");
         return await respuesta.json();
     } catch (error) {
         console.error("Error enviando los datos: ", error);
@@ -30,15 +32,12 @@ async function obtenerDatosAPI(url) {
     };
 
     try {
-        const respuesta = await fetch(new Request(url, opciones));
-        return await respuesta.json();
+        return await fetch(new Request(url, opciones));
     } catch (error) {
         console.error("Error al obtener datos: ", error);
         throw error;
     }
 }
-
-function Redirigir_sesion(user_id) {}
 
 document.addEventListener("DOMContentLoaded", async () => {
     user_session = localStorage.getItem("session_user_id");
@@ -53,10 +52,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const formData = new FormData(e.target);
                     const formObject = Object.fromEntries(formData.entries());
                     formObject["id"] = formObject["id"].toLowerCase();
+                    await obtenerDatosAPI(BASE_URL_API + `/${formObject["id"]}`)
                     if (
-                        !(await obtenerDatosAPI(
-                            BASE_URL_API + formObject["id"]
-                        ))
+                        !await obtenerDatosAPI(
+                            BASE_URL_API + `/${formObject["id"]}`
+                        ).ok
                     ) {
                         await enviarDatosAPI(BASE_URL_API, formObject);
                     }
@@ -68,14 +68,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.querySelector("header").style.flexGrow = 1;
             LOADER_ELEMENT.style["right"] = "0%";
             setTimeout(() => {
-                window.location.href = "http://127.0.0.1:5500/session.html"
+                window.location.href = "http://127.0.0.1:5500/session.html";
             }, 1500);
         }
     } else {
         if (!user_session) {
-            window.location.href = "http://127.0.0.1:5500/index.html"
+            window.location.href = "http://127.0.0.1:5500/index.html";
         } else {
-
         }
     }
 });
