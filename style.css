@@ -48,7 +48,7 @@ a {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .grid_text_center {
@@ -131,6 +131,10 @@ a {
     visibility: hidden;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 button,
 .button {
     cursor: pointer;
@@ -163,7 +167,7 @@ button:active,
 header {
     gap: 1rem;
     padding: 1rem;
-    flex-grow: .3;
+    flex-grow: 0.3;
 }
 
 header img {
@@ -177,6 +181,7 @@ header img {
 
 main {
     flex-grow: 1;
+    gap: 8px;
 }
 
 #login {
@@ -185,11 +190,15 @@ main {
 
 #login input {
     background-image: url(https://www.svgrepo.com/show/532363/user-alt-1.svg);
+}
+
+#login input,
+#search {
     background-repeat: no-repeat;
     background-position: 10px;
-    background-size: 1rem;
+    background-size: 1.5rem;
     padding: 0.5rem;
-    padding-left: 2.3rem;
+    padding-left: 2.5rem;
     font-size: 1rem;
     border-radius: 2px;
     border: var(--main-color) 0.1px solid;
@@ -202,14 +211,13 @@ input:focus {
 }
 
 .card {
-    overflow: hidden;
+    max-height: 100%;
     background: var(--bg-color);
     border: 2px solid var(--main-color);
     box-shadow: 4px 4px var(--main-color);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     padding: 20px;
     gap: 10px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -226,27 +234,250 @@ input:focus {
     right: 100%;
 }
 
-.logo:hover .load_bar_animation {
+details {
+    padding: 0 !important;
+    z-index: 1;
+}
+
+summary {
+    padding: 20px;
+}
+
+summary h1 {
+    display: inline;
+}
+
+summary::marker {
+    font-size: 2rem;
+    font-weight: 1000;
+}
+
+#search_bar {
+    padding: 0 20px 12px 20px;
+}
+
+#search {
+    background-image: url("assets/search.svg");
+    margin-block: 1rem 0;
+}
+
+#dropdown {
+    background-color: white;
+    top: 104.8px;
+    left: 0;
+    right: 0;
+    margin: 20px;
+    padding: 0;
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+h5 {
+    background-color: var(--main-lightcolor);
+    color: white;
+    padding: 5px;
+    margin: 0;
+    text-align: center;
+}
+
+li {
+    padding: 5px;
+    border-bottom: lightgray 0.5px solid;
+}
+
+li:hover,
+li:active {
+    background-color: var(--bg-color);
+}
+
+li div {
+    flex-grow: 1;
+    padding: 8px;
+}
+
+li img {
+    width: 70px;
+}
+
+h6,
+li q {
+    font-size: unset;
+    text-align: center;
+    align-content: center;
+    margin: 0;
+}
+
+li q {
+    color: var(--font-color-sub);
+    font-size: 0.9rem;
+}
+
+q {
+    font-style: italic;
+}
+
+li::marker {
+    content: "";
+}
+
+#pantalla_agregar {
+    padding: 2rem 4rem;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(2px);
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.36),
+        rgba(0, 0, 0, 0.32)
+    );
+}
+
+#pantalla_agregar .card {
+    padding: 0;
+}
+
+.pantalla_agregar-header {
+    gap: 10px;
+    text-align: center;
+}
+
+.pantalla_agregar-header h2 {
+    flex-grow: 2;
+    margin: 0;
+    align-self: center;
+}
+
+#pantalla_agregar-body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#pantalla_agregar-body input, #pantalla_agregar-body select {
+    font-size: 1rem;
+}
+
+select[name="reseña"],
+select[name="reseña"] *,
+select[name="reseña"] *:hover {
+    color: gold;
+}
+
+textarea {
+    resize: none;
+}
+
+.pantalla_agregar-header > *,
+#pantalla_agregar-body,
+.pantalla_agregar-footer {
+    padding: 20px;
+    gap: 1rem;
+}
+
+.button_exit {
+    background-color: red;
+    flex-grow: 1;
+}
+
+.exit {
+    background-color: transparent;
+    z-index: 5;
+    border-radius: 0;
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-weight: 700;
+    user-select: none;
+    box-shadow: none;
+}
+
+main {
+    padding-top: 85.6px;
+}
+
+.button_exit:hover .load_bar_animation,
+.button_exit:active .load_bar_animation,
+.logo:hover .load_bar_animation,
+.logo:active .load_bar_animation,
+a-section:hover .load_bar_animation,
+a-section:active .load_bar_animation {
     right: 0%;
 }
 
-.sections {
+article {
+    flex-grow: 1;
+}
+
+a-section:hover svg,
+a-section:active svg {
+    transform: scale(1.15);
+}
+
+aside > * {
+    cursor: pointer;
+}
+
+#sections {
     gap: 0;
     padding: 0;
 }
 
-.sections > * {
+#sections > * {
     padding: 10px;
     width: 60px;
-}
-
-.sections section:nth-child(1),
-.sections section:nth-child(2),
-.sections section:nth-child(3) {
     flex-grow: 4;
 }
 
-.sections section:nth-child(4) {
+#sections > :last-child {
     flex-grow: 1;
 }
 
+@media (max-width: 500px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .load_bar_animation {
+        right: 0;
+        opacity: 0;
+    }
+
+    div:active .load_bar_animation,
+    a-section:active .load_bar_animation {
+        opacity: 1;
+    }
+
+    #dropdown {
+        max-height: 390px;
+    }
+
+    main {
+        flex-direction: column;
+    }
+
+    article {
+        order: 1;
+    }
+
+    #filters {
+        order: 2;
+    }
+
+    #sections {
+        order: 3;
+        flex-direction: row;
+    }
+
+    #sections > * {
+        flex-grow: 1 !important;
+    }
+
+    svg {
+        width: 50px;
+    }
+}
