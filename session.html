@@ -30,7 +30,7 @@
                 <ul id="dropdown" class="absolute"></ul>
             </div>
         </details>
-        <div id="pantalla_agregar" class="absolute flex all_c no_display">
+        <div id="pantalla_agregar" class="absolute flex_col all_c no_display">
             <div class="card">
                 <div class="pantalla_agregar-header flex">
                     <h2 class="unselected">
@@ -56,7 +56,12 @@
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Género</h3>
-                        <temp-select tipo="genero" name="genero"></temp-select>
+                        <select name="genero">
+                            <option value="" selected>
+                                Seleccionar Género...
+                            </option>
+                            <option value="Otro" selected>Otro</option>
+                        </select>
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Plataforma</h3>
@@ -135,7 +140,7 @@
         <main class="flex relative">
             <aside id="filters" class="flex_col card"></aside>
             <article>
-                <form class="flex card j_se">
+                <form class="flex wrap card j_sb">
                     <svg-section class="flex all_c relative">
                         <div class="load_bar_animation absolute"></div>
                         <img
@@ -189,6 +194,7 @@
                             <q convertir="">El diablo</q>
                         </div>
                     </div>
+                    <button>Editar</button>
                 </form>
             </article>
             <aside id="sections" class="flex_col card j_se">

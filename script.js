@@ -143,11 +143,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const procesos_de_usuario = (await obtenerDatosAPI( MOCKAPI_BASEURL + localStorage.getItem("session_user_id")
             ))["process_items"];
 
-            console.log(procesos_de_usuario);
 
-
-
-            function cargarProcesos(procesos_de_usuario) {
+            function cargarProcesos() {
                 const Cuerpo = document.querySelector("main > article");
                 procesos_de_usuario.forEach(proceso => {
                     const proceso_cuerpo = document.createElement("section");
@@ -191,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const option = document.createElement("option");
                     option.value, (option.textContent = proveedor);
                     padre
-                        .querySelector("temp-select[name='genero'] select")
+                        .querySelector("select[name='genero']")
                         .insertAdjacentElement("beforeend", option);
                 });
             }
@@ -495,17 +492,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             
 
             function cargarPantallaAgregar(origen) {
-                debugger
-                customElements.define("temp-select",templ_select);
-                llenarGeneros(popup);
-                AQUI QUEDE
-                debugger
-                genero = popup.querySelector("temp-select[name='genero'] select");
+                
+                genero = popup.querySelector("select[name='genero']");
                 formato = popup.querySelector("select[name='formato']");
                 boton_añadir_personalizado.classList.add("no_display");
-                
+                debugger
+                llenarGeneros(popup);
                 dropdown.textContent = "";
-
+                debugger
                 if (origen.tagName === "LI") {
                     titulo.value = origen.getAttribute("titulo");
 
