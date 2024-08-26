@@ -19,6 +19,7 @@
 
 body,
 html {
+    height: 100vh;
     overflow-x: hidden;
     background-color: var(--bg-color);
     background-image: linear-gradient(#e5e7eb 1px, #0000 0),
@@ -180,6 +181,7 @@ header img {
 }
 
 main {
+    height: 100vh;
     flex-grow: 1;
     gap: 8px;
 }
@@ -404,17 +406,21 @@ main {
 .button_exit:active .load_bar_animation,
 .logo:hover .load_bar_animation,
 .logo:active .load_bar_animation,
-a-section:hover .load_bar_animation,
-a-section:active .load_bar_animation {
+svg-section:hover .load_bar_animation,
+svg-section:active .load_bar_animation {
     right: 0%;
 }
 
 article {
     flex-grow: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-a-section:hover svg,
-a-section:active svg {
+
+
+svg-section:hover svg,
+svg-section:active svg {
     transform: scale(1.15);
 }
 
@@ -448,7 +454,7 @@ aside > * {
     }
 
     div:active .load_bar_animation,
-    a-section:active .load_bar_animation {
+    svg-section:active .load_bar_animation {
         opacity: 1;
     }
 

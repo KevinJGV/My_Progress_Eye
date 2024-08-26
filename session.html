@@ -47,22 +47,34 @@
                 <form id="pantalla_agregar-body" method="post" class="grid">
                     <div class="grid_field flex_col">
                         <h3>Nombre del Recurso</h3>
-                        <input name="titulo" required type="text" placeholder="Ex. Spider-Man 2">
+                        <input
+                            name="titulo"
+                            required
+                            type="text"
+                            placeholder="Ex. Spider-Man 2"
+                        />
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Género</h3>
-                        <select name="genero" form="pantalla_agregar-body">
-                            <option value="" selected>Seleccionar Género...</option>
-                            <option value="Otro" selected>Otro</option>
-                        </select>
+                        <temp-select tipo="genero" name="genero"></temp-select>
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Plataforma</h3>
-                        <input required value="" list="plataformas" id="plataforma" name="plataforma" form="pantalla_agregar-body" placeholder="Ex. Netflix, Pluto TV, Hulu...">
+                        <input
+                            required
+                            value=""
+                            list="plataformas"
+                            id="plataforma"
+                            name="plataforma"
+                            form="pantalla_agregar-body"
+                            placeholder="Ex. Netflix, Pluto TV, Hulu..."
+                        />
                         <datalist id="plataformas">
                             <option value="Otra">Otra</option>
                             <option value="De la Web">De la Web</option>
-                            <option value="Archivo Multimedia">Archivo Multimedia (MP4, MOV, AVI...)</option>
+                            <option value="Archivo Multimedia">
+                                Archivo Multimedia (MP4, MOV, AVI...)
+                            </option>
                         </datalist>
                     </div>
                     <div class="grid_field flex_col">
@@ -76,7 +88,9 @@
                     <div class="grid_field flex_col">
                         <h3>Formato</h3>
                         <select name="formato" form="pantalla_agregar-body">
-                            <option value="" selected>Seleccionar Formato...</option>
+                            <option value="" selected>
+                                Seleccionar Formato...
+                            </option>
                             <option value="Libros">Libro</option>
                             <option value="Series" selected>Serie</option>
                             <option value="Películas">Película</option>
@@ -84,40 +98,110 @@
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Fecha de Terminación</h3>
-                        <input type="date" name="fecha">
+                        <input type="date" name="fecha" />
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Valoración Final</h3>
                         <select name="reseña" form="pantalla_agregar-body">
                             <option value="1" selected>&starf;</option>
                             <option value="2" selected>&starf; &starf;</option>
-                            <option value="3" selected>&starf; &starf; &starf;</option>
-                            <option value="4" selected>&starf; &starf; &starf; &starf;</option>
-                            <option value="5" selected>&starf; &starf; &starf; &starf; &starf;</option>
+                            <option value="3" selected>
+                                &starf; &starf; &starf;
+                            </option>
+                            <option value="4" selected>
+                                &starf; &starf; &starf; &starf;
+                            </option>
+                            <option value="5" selected>
+                                &starf; &starf; &starf; &starf; &starf;
+                            </option>
                         </select>
                     </div>
                     <div class="grid_field flex_col">
                         <h3>Reseña Personal</h3>
-                        <textarea name="reseña" placeholder="Tu opinión personal sobre este contenido"></textarea>
+                        <textarea
+                            name="reseña"
+                            placeholder="Tu opinión personal sobre este contenido"
+                        ></textarea>
                     </div>
-                    <input type="hidden" name="imagen">
+                    <input type="hidden" name="imagen" />
                 </form>
                 <div class="pantalla_agregar-footer">
-                    <button type="submit" form="pantalla_agregar-body">Añadir</button>
+                    <button type="submit" form="pantalla_agregar-body">
+                        Añadir
+                    </button>
                 </div>
             </div>
         </div>
         <main class="flex relative">
             <aside id="filters" class="flex_col card"></aside>
-            <article></article>
+            <article>
+                <form class="flex card j_se">
+                    <svg-section class="flex all_c relative">
+                        <div class="load_bar_animation absolute"></div>
+                        <img
+                            src="https://image.tmdb.org/t/p/w500//A7YDBDf9z1jvORT3omeD01Ez47S.jpg"
+                            alt=""
+                            srcset=""
+                        />
+                    </svg-section>
+                    <div class="proces_1 flex_col j_se">
+                        <div class="proces_hijo">
+                            <h3>Titulo</h3>
+                            <p convertir="input">El diablo</p>
+                        </div>
+                        <div class="proces_hijo">
+                            <h3>Género</h3>
+                            <p convertir="">El diablo</p>
+                        </div>
+                    </div>
+                    <div class="proces_2 flex_col j_se">
+                        <div class="proces_hijo">
+                            <h3>Plataforma</h3>
+                            <p convertir="input">El diablo</p>
+                            <datalist id="plataformas">
+                                <option value="Otra">Otra</option>
+                                <option value="De la Web">De la Web</option>
+                                <option value="Archivo Multimedia">
+                                    Archivo Multimedia (MP4, MOV, AVI...)
+                                </option>
+                            </datalist>
+                        </div>
+                        <div class="proces_hijo">
+                            <h3>Estado</h3>
+                            <p convertir="estado">El diablo</p>
+                        </div>
+                        <div class="proces_hijo">
+                            <h3>Formato</h3>
+                            <p convertir="">El diablo</p>
+                        </div>
+                    </div>
+                    <div class="proces_3 flex_col j_se">
+                        <div class="proces_hijo">
+                            <h3>Fecha de terminación</h3>
+                            <p convertir="">El diablo</p>
+                        </div>
+                        <div class="proces_hijo">
+                            <h3>Valoración final</h3>
+                            <p convertir="">El diablo</p>
+                        </div>
+                        <div class="proces_hijo">
+                            <h3>Reseña personal</h3>
+                            <q convertir="">El diablo</q>
+                        </div>
+                    </div>
+                </form>
+            </article>
             <aside id="sections" class="flex_col card j_se">
-                <a-section svg="deck" class="flex all_c relative"> </a-section>
-                <a-section svg="book" class="flex all_c relative"> </a-section>
-                <a-section svg="movies" class="flex all_c relative">
-                </a-section>
-                <a-section svg="tv" class="flex all_c relative"> </a-section>
-                <a-section svg="logout" class="flex all_c relative">
-                </a-section>
+                <svg-section svg="deck" class="flex all_c relative">
+                </svg-section>
+                <svg-section svg="Libros" class="flex all_c relative">
+                </svg-section>
+                <svg-section svg="Películas" class="flex all_c relative">
+                </svg-section>
+                <svg-section svg="Series" class="flex all_c relative">
+                </svg-section>
+                <svg-section svg="logout" class="flex all_c relative">
+                </svg-section>
             </aside>
         </main>
     </body>

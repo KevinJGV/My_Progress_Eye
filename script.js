@@ -145,7 +145,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             console.log(procesos_de_usuario);
 
-            SIGUE LA CREACION DE LOS PROCESOS
+
+
+            function cargarProcesos(procesos_de_usuario) {
+                const Cuerpo = document.querySelector("main > article");
+                procesos_de_usuario.forEach(proceso => {
+                    const proceso_cuerpo = document.createElement("section");
+                })
+            }
+
+            // SIGUE LA CREACION DE LOS PROCESOS
 
             function llenarDatalist() {
                 const conjunto_proveedores = new Set();
@@ -168,7 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             llenarDatalist();
 
-            function llenarGeneros() {
+            function llenarGeneros(padre) {
                 const conjunto_generos = new Set();
                 generos_peliculas.genres.forEach((genero) =>
                     conjunto_generos.add(genero.name)
@@ -181,13 +190,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 generos.forEach((proveedor) => {
                     const option = document.createElement("option");
                     option.value, (option.textContent = proveedor);
-                    document
-                        .querySelector("select[name='genero']")
+                    padre
+                        .querySelector("temp-select[name='genero'] select")
                         .insertAdjacentElement("beforeend", option);
                 });
             }
 
-            llenarGeneros();
+            
             function obtener_genero(material_audiovisual) {
                 let nombre_genero = "";
                 const id = material_audiovisual.genre_ids[0];
@@ -237,13 +246,27 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return proveedor;
             }
 
-            async function obtenerSVG_Texto(nombre) {
-                return await fetch(`/assets/${nombre}.svg`).then((res) =>
+            async function obtenerArchivo_Texto(nombre,extension) {
+                return await fetch(`/assets/${nombre}.${extension}`).then((res) =>
                     res.text()
                 );
             }
 
-            class OpcionLateral extends HTMLElement {
+            class templ_select extends HTMLElement {
+                constructor() {
+                    super();
+                }
+
+                async connectedCallback() {
+                    const tipo = this.getAttribute("tipo");
+                    this.insertAdjacentHTML(
+                        "beforeend",
+                        await obtenerArchivo_Texto(tipo,"html")
+                    );
+                }
+            }
+            
+            class svg_section extends HTMLElement {
                 constructor() {
                     super();
                 }
@@ -304,12 +327,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     this.insertAdjacentElement("beforeend", animacion);
                     this.insertAdjacentHTML(
                         "beforeend",
-                        await obtenerSVG_Texto(SVG)
+                        await obtenerArchivo_Texto(SVG, "svg")
                     );
                 }
             }
 
-            customElements.define("a-section", OpcionLateral);
+            customElements.define("svg-section", svg_section);
 
             async function llenarDropdown(objeto, tipo, dropdown) {
                 const titulo = document.createElement("h5");
@@ -463,14 +486,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 document.querySelector("#search_bar button");
             const dropdown = document.querySelector("#dropdown");
             const popup = document.querySelector("#pantalla_agregar");
-            const titulo = popup.querySelector("input[name='titulo'");
-            const genero = popup.querySelector("select[name='genero'");
-            const paltaforma = popup.querySelector("input[name='plataforma'");
-            const formato = popup.querySelector("select[name='formato'");
-            const imagen = popup.querySelector("input[name='imagen'");
+            const titulo = popup.querySelector("input[name='titulo']");
+            let genero;
+            const paltaforma = popup.querySelector("input[name='plataforma']");
+            let formato;
+            const imagen = popup.querySelector("input[name='imagen']");
+
+            
 
             function cargarPantallaAgregar(origen) {
+                debugger
+                customElements.define("temp-select",templ_select);
+                llenarGeneros(popup);
+                AQUI QUEDE
+                debugger
+                genero = popup.querySelector("temp-select[name='genero'] select");
+                formato = popup.querySelector("select[name='formato']");
                 boton_añadir_personalizado.classList.add("no_display");
+                
                 dropdown.textContent = "";
 
                 if (origen.tagName === "LI") {
