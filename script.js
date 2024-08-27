@@ -140,15 +140,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "https://api.themoviedb.org/3/watch/providers/tv?language=es-MX",
                 "tmdb"
             );
-            const procesos_de_usuario = (await obtenerDatosAPI( MOCKAPI_BASEURL + localStorage.getItem("session_user_id")
-            ))["process_items"];
+            const procesos_de_usuario = (
+                await obtenerDatosAPI(
+                    MOCKAPI_BASEURL + localStorage.getItem("session_user_id")
+                )
+            )["process_items"];
 
+            console.log(procesos_de_usuario);
 
             function cargarProcesos() {
                 const Cuerpo = document.querySelector("main > article");
-                procesos_de_usuario.forEach(proceso => {
-                    const proceso_cuerpo = document.createElement("section");
-                })
+                procesos_de_usuario.forEach((proceso) => {
+                    const proceso_cuerpo = document.createElement("form");
+                    // el resto de logica
+                });
             }
 
             // SIGUE LA CREACION DE LOS PROCESOS
@@ -174,6 +179,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             llenarDatalist();
 
+            // Función genérica para llenar cualquier select
+            function llenarSelect(
+                padre,
+                nombreSelect,
+                opciones,
+                valorSeleccionado = ""
+            ) {
+                const select = padre.querySelector(
+                    `select[name='${nombreSelect}']`
+                );
+                select.innerHTML = ""; // Limpia las opciones actuales
+                opciones.forEach((opcion) => {
+                    const option = document.createElement("option");
+                    option.value = opcion;
+                    option.textContent = opcion;
+                    if (opcion === valorSeleccionado) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            }
+
+            // Llenar el select de géneros con datos dinámicos de películas y series
             function llenarGeneros(padre) {
                 const conjunto_generos = new Set();
                 generos_peliculas.genres.forEach((genero) =>
@@ -182,18 +210,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 generos_series.genres.forEach((genero) =>
                     conjunto_generos.add(genero.name)
                 );
-                const generos = Array.from(conjunto_generos);
-                generos.sort();
-                generos.forEach((proveedor) => {
-                    const option = document.createElement("option");
-                    option.value, (option.textContent = proveedor);
-                    padre
-                        .querySelector("select[name='genero']")
-                        .insertAdjacentElement("beforeend", option);
-                });
+                const generos = Array.from(conjunto_generos).sort();
+                llenarSelect(padre, "genero", generos);
             }
 
-            
             function obtener_genero(material_audiovisual) {
                 let nombre_genero = "";
                 const id = material_audiovisual.genre_ids[0];
@@ -243,9 +263,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return proveedor;
             }
 
-            async function obtenerArchivo_Texto(nombre,extension) {
-                return await fetch(`/assets/${nombre}.${extension}`).then((res) =>
-                    res.text()
+            async function obtenerArchivo_Texto(nombre, extension) {
+                return await fetch(`/assets/${nombre}.${extension}`).then(
+                    (res) => res.text()
                 );
             }
 
@@ -258,11 +278,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const tipo = this.getAttribute("tipo");
                     this.insertAdjacentHTML(
                         "beforeend",
-                        await obtenerArchivo_Texto(tipo,"html")
+                        await obtenerArchivo_Texto(tipo, "html")
                     );
                 }
             }
-            
+
             class svg_section extends HTMLElement {
                 constructor() {
                     super();
@@ -489,17 +509,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             let formato;
             const imagen = popup.querySelector("input[name='imagen']");
 
-            
-
             function cargarPantallaAgregar(origen) {
-                
                 genero = popup.querySelector("select[name='genero']");
                 formato = popup.querySelector("select[name='formato']");
                 boton_añadir_personalizado.classList.add("no_display");
-                debugger
+                debugger;
                 llenarGeneros(popup);
                 dropdown.textContent = "";
-                debugger
+                debugger;
                 if (origen.tagName === "LI") {
                     titulo.value = origen.getAttribute("titulo");
 

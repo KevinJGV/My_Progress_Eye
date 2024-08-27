@@ -219,7 +219,6 @@ input:focus {
     box-shadow: 4px 4px var(--main-color);
     border-radius: 5px;
     padding: 20px;
-    gap: 10px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
         sans-serif;
@@ -413,10 +412,16 @@ article {
     flex-grow: 1;
     overflow-x: hidden;
     overflow-y: auto;
+    font-size: 0.8rem;
 }
 
 form img {
-    max-width: 213px;
+    max-width: 175px;
+    z-index: 1;
+}
+
+img, svg {
+    position: relative;
 }
 
 article form {
@@ -467,7 +472,7 @@ aside > * {
     flex-grow: 1;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
     * {
         font-size: 0.9rem;
     }
@@ -496,7 +501,7 @@ aside > * {
 
     main {
         flex-direction: column;
-        padding-top: 120px;
+        padding-top: 95px;
     }
 
     article {
