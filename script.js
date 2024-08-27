@@ -146,17 +146,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                 )
             )["process_items"];
 
-            console.log(procesos_de_usuario);
-
-            function cargarProcesos() {
-                const Cuerpo = document.querySelector("main > article");
-                procesos_de_usuario.forEach((proceso) => {
-                    const proceso_cuerpo = document.createElement("form");
-                    // el resto de logica
-                });
-            }
-
-            // SIGUE LA CREACION DE LOS PROCESOS
+            const opcionesEstado = ["Pendiente", "En Curso", "Finalizado"];
+            const opcionesFormato = [
+                "Seleccionar Formato...",
+                "Libros",
+                "Series",
+                "Películas",
+            ];
+            const opcionesValoracion = {
+                1: "&starf;",
+                2: "&starf; &starf;",
+                3: "&starf; &starf; &starf;",
+                4: "&starf; &starf; &starf; &starf;",
+                5: "&starf; &starf; &starf; &starf; &starf;",
+            };
 
             function llenarDatalist() {
                 const conjunto_proveedores = new Set();
@@ -180,39 +183,264 @@ document.addEventListener("DOMContentLoaded", async () => {
             llenarDatalist();
 
             // Función genérica para llenar cualquier select
-            function llenarSelect(
-                padre,
-                nombreSelect,
-                opciones,
-                valorSeleccionado = ""
-            ) {
-                const select = padre.querySelector(
-                    `select[name='${nombreSelect}']`
-                );
+            function llenarSelect(select, opciones, valorSeleccionado = "") {
                 select.innerHTML = ""; // Limpia las opciones actuales
-                opciones.forEach((opcion) => {
-                    const option = document.createElement("option");
-                    option.value = opcion;
-                    option.textContent = opcion;
-                    if (opcion === valorSeleccionado) {
-                        option.selected = true;
+                if (Array.isArray(opciones)) {
+                    // Caso para opcionesEstado y opcionesFormato
+                    opciones.forEach((opcion) => {
+                        const option = document.createElement("option");
+                        option.value = opcion;
+                        option.textContent = opcion;
+                        if (opcion === valorSeleccionado) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                } else {
+                    // Caso para opcionesValoracion
+                    for (const [value, text] of Object.entries(opciones)) {
+                        const option = document.createElement("option");
+                        option.value = value;
+                        option.innerHTML = text;
+                        if (value === valorSeleccionado) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
                     }
-                    select.appendChild(option);
+                }
+            }
+
+            // Función para convertir un elemento de texto a un input o select para editar
+            function habilitarEdicion(
+                p,
+                tipo,
+                opciones = null,
+                valorOriginal = null
+            ) {
+                let elementoEditable;
+
+                if (tipo === "input" || tipo === "date") {
+                    elementoEditable = document.createElement("input");
+                    elementoEditable.type = tipo;
+                    elementoEditable.value = p.textContent;
+                } else if (tipo === "select") {
+                    elementoEditable = document.createElement("select");
+                    llenarSelect(
+                        elementoEditable,
+                        opciones,
+                        p.getAttribute("valor")
+                    );
+                }
+
+                p.replaceWith(elementoEditable);
+                elementoEditable.focus();
+
+                // Al perder el foco, volver al elemento de texto
+                elementoEditable.addEventListener("blur", () => {
+                    let selectedValue;
+                    let selectedText;
+
+                    if (elementoEditable.type === "select" || elementoEditable.type === "select-one") {
+                        selectedValue = elementoEditable.value;
+                        selectedText =
+                            elementoEditable.options[
+                                elementoEditable.selectedIndex
+                            ].text;
+                        // Si es un select para valoración, mostrar el contenido (estrellas) en lugar del valor
+                        if (opciones === opcionesValoracion) {
+                            p.innerHTML = selectedText;  // Asegura que se muestre el contenido de texto (estrellas)
+                        } else {
+                            p.textContent = selectedValue;
+                        }
+                    } else if (elementoEditable.type === "date") {
+                        selectedValue = elementoEditable.value;
+                        // Si no hay fecha seleccionada, mostrar "Pendiente por señalar"
+                        p.textContent = selectedValue
+                            ? selectedValue
+                            : "Pendiente por señalar";
+                    } else {
+                        selectedValue = elementoEditable.value;
+                        // Si el input está vacío, restaurar el valor original
+                        p.textContent = selectedValue
+                            ? selectedValue
+                            : valorOriginal;
+                    }
+
+                    p.setAttribute("valor", selectedValue || valorOriginal); // Guardar el valor seleccionado o restaurar el original
+                    elementoEditable.replaceWith(p);
                 });
             }
 
-            // Llenar el select de géneros con datos dinámicos de películas y series
-            function llenarGeneros(padre) {
-                const conjunto_generos = new Set();
-                generos_peliculas.genres.forEach((genero) =>
-                    conjunto_generos.add(genero.name)
-                );
-                generos_series.genres.forEach((genero) =>
-                    conjunto_generos.add(genero.name)
-                );
-                const generos = Array.from(conjunto_generos).sort();
-                llenarSelect(padre, "genero", generos);
+            function cargarProcesos() {
+                const Cuerpo = document.querySelector("main > article");
+
+                procesos_de_usuario.forEach((proceso) => {
+                    const proceso_cuerpo = document.createElement("form");
+                    proceso_cuerpo.className = "flex wrap card j_sb";
+
+                    const svg_section = document.createElement("svg-section");
+                    svg_section.className = "flex all_c relative";
+
+                    const load_bar = document.createElement("div");
+                    load_bar.className = "load_bar_animation absolute";
+                    svg_section.appendChild(load_bar);
+
+                    const img = document.createElement("img");
+                    img.className = "relative";
+                    img.src = proceso.imagen;
+                    img.alt = "";
+                    svg_section.appendChild(img);
+
+                    proceso_cuerpo.appendChild(svg_section);
+
+                    const proces_1 = document.createElement("div");
+                    proces_1.className = "proces_1 flex_col j_se";
+
+                    // Título
+                    const proces_hijo_1_titulo = document.createElement("div");
+                    proces_hijo_1_titulo.className = "proces_hijo";
+                    const h3_titulo = document.createElement("h3");
+                    h3_titulo.textContent = "Titulo";
+                    const p_titulo = document.createElement("p");
+                    p_titulo.textContent = proceso.titulo;
+
+                    p_titulo.addEventListener("click", () => {
+                        habilitarEdicion(
+                            p_titulo,
+                            "input",
+                            null,
+                            proceso.titulo
+                        );
+                    });
+
+                    proces_hijo_1_titulo.appendChild(h3_titulo);
+                    proces_hijo_1_titulo.appendChild(p_titulo);
+                    proces_1.appendChild(proces_hijo_1_titulo);
+
+                    // Género
+                    const proces_hijo_1_genero = document.createElement("div");
+                    proces_hijo_1_genero.className = "proces_hijo";
+                    const h3_genero = document.createElement("h3");
+                    h3_genero.textContent = "Género";
+                    const p_genero = document.createElement("p");
+                    p_genero.textContent = proceso.genero;
+                    p_genero.setAttribute("valor", proceso.genero); // Guardar valor actual
+
+                    p_genero.addEventListener("click", () => {
+                        habilitarEdicion(
+                            p_genero,
+                            "select",
+                            Array.from(generos_peliculas.genres).map(
+                                (g) => g.name
+                            )
+                        );
+                    });
+
+                    proces_hijo_1_genero.appendChild(h3_genero);
+                    proces_hijo_1_genero.appendChild(p_genero);
+                    proces_1.appendChild(proces_hijo_1_genero);
+
+                    proceso_cuerpo.appendChild(proces_1);
+
+                    const proces_2 = document.createElement("div");
+                    proces_2.className = "proces_2 flex_col j_se";
+
+                    // Estado
+                    const proces_hijo_2_estado = document.createElement("div");
+                    proces_hijo_2_estado.className = "proces_hijo";
+                    const h3_estado = document.createElement("h3");
+                    h3_estado.textContent = "Estado";
+                    const p_estado = document.createElement("p");
+                    p_estado.textContent = proceso.estado;
+                    p_estado.setAttribute("valor", proceso.estado); // Guardar valor actual
+
+                    p_estado.addEventListener("click", () => {
+                        habilitarEdicion(p_estado, "select", opcionesEstado);
+                    });
+
+                    proces_hijo_2_estado.appendChild(h3_estado);
+                    proces_hijo_2_estado.appendChild(p_estado);
+                    proces_2.appendChild(proces_hijo_2_estado);
+
+                    // Formato
+                    const proces_hijo_2_formato = document.createElement("div");
+                    proces_hijo_2_formato.className = "proces_hijo";
+                    const h3_formato = document.createElement("h3");
+                    h3_formato.textContent = "Formato";
+                    const p_formato = document.createElement("p");
+                    p_formato.textContent = proceso.formato;
+                    p_formato.setAttribute("valor", proceso.formato); // Guardar valor actual
+
+                    p_formato.addEventListener("click", () => {
+                        habilitarEdicion(p_formato, "select", opcionesFormato);
+                    });
+
+                    proces_hijo_2_formato.appendChild(h3_formato);
+                    proces_hijo_2_formato.appendChild(p_formato);
+                    proces_2.appendChild(proces_hijo_2_formato);
+
+                    proceso_cuerpo.appendChild(proces_2);
+
+                    const proces_3 = document.createElement("div");
+                    proces_3.className = "proces_3 flex_col j_se";
+
+                    // Fecha de terminación
+                    const proces_hijo_3_fecha = document.createElement("div");
+                    proces_hijo_3_fecha.className = "proces_hijo";
+                    const h3_fecha = document.createElement("h3");
+                    h3_fecha.textContent = "Fecha de terminación";
+                    const p_fecha = document.createElement("p");
+                    p_fecha.textContent =
+                        proceso.fecha || "Pendiente por señalar";
+
+                    p_fecha.addEventListener("click", () => {
+                        habilitarEdicion(p_fecha, "date");
+                    });
+
+                    proces_hijo_3_fecha.appendChild(h3_fecha);
+                    proces_hijo_3_fecha.appendChild(p_fecha);
+                    proces_3.appendChild(proces_hijo_3_fecha);
+                    debugger
+                    // Valoración final
+                    const proces_hijo_3_valoracion =
+                        document.createElement("div");
+                    proces_hijo_3_valoracion.className = "proces_hijo";
+                    const h3_valoracion = document.createElement("h3");
+                    h3_valoracion.textContent = "Valoración Final";
+                    const p_valoracion = document.createElement("p");
+                    p_valoracion.innerHTML =
+                        opcionesValoracion[proceso.reseña] || "Por definir";
+                    p_valoracion.setAttribute(
+                        "valor",
+                        proceso.valoracion || "1"
+                    ); // Guardar valor actual
+
+                    p_valoracion.addEventListener("click", () => {
+                        habilitarEdicion(
+                            p_valoracion,
+                            "select",
+                            opcionesValoracion
+                        );
+                    });
+
+                    proces_hijo_3_valoracion.appendChild(h3_valoracion);
+                    proces_hijo_3_valoracion.appendChild(p_valoracion);
+                    proces_3.appendChild(proces_hijo_3_valoracion);
+
+                    proceso_cuerpo.appendChild(proces_3);
+
+                    const boton_eliminar = document.createElement("button");
+                    boton_eliminar.textContent = "Eliminar";
+                    boton_eliminar.addEventListener("click", () => {
+                        proceso_cuerpo.remove();
+                    });
+                    proceso_cuerpo.appendChild(boton_eliminar);
+
+                    Cuerpo.appendChild(proceso_cuerpo);
+                });
             }
+
+            cargarProcesos();
 
             function obtener_genero(material_audiovisual) {
                 let nombre_genero = "";
@@ -465,6 +693,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "input",
                 debounce(async (e) => {
                     dropdown.textContent = "";
+                    dropdown.classList.remove("no_display");
                     const value = e.target.value;
                     if (value) {
                         boton_añadir_personalizado.classList.remove(
@@ -551,6 +780,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             function cerrarPantalla_agregar() {
                 limpiarPantalla_agregar();
+                dropdown.classList.add("no_display");
                 dropdown.textContent = "";
                 popup.classList.add("no_display");
                 [titulo, genero, paltaforma, formato].forEach((input) =>

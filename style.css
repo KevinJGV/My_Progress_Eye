@@ -267,7 +267,7 @@ summary::marker {
     right: 0;
     margin: 20px;
     padding: 0;
-    max-height: 500px;
+    max-height: 700px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -496,7 +496,7 @@ aside > * {
     }
 
     #dropdown {
-        max-height: 390px;
+        max-height: 600px;
     }
 
     main {
