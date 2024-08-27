@@ -416,7 +416,7 @@ article {
 }
 
 form img {
-    max-width: 175px;
+    max-height: 263px;
     z-index: 1;
 }
 
@@ -429,11 +429,13 @@ article form {
     overflow-x: auto;
     padding: 0;
     padding: 0 !important;
+    margin-top: 10px;
 }
 
 article form > *{
     padding: 20px;
     flex-grow: 1 ;
+    flex-basis: min-content;
 }
 
 article form > :first-child,
@@ -442,6 +444,29 @@ article form > :last-child{
     margin: 0;
     border-radius: 0;
     flex-grow: 0 !important;
+}
+
+form:hover .load_bar_animation.absolute {
+	right: 0%;
+}
+
+article p {
+    cursor: text;
+}
+
+article p:hover {
+    color: gray;
+    text-shadow: 2px 2px 2px var(--highligt), 0 0 1em var(--main-focus), 0 0 0.2em var(--main-focus);
+}
+
+article p::after {
+    content: url("assets/edit.svg");
+    margin: 15px;
+    cursor: pointer;
+}
+
+article p,article input, article select {
+    display: inline;
 }
 
 article form button{

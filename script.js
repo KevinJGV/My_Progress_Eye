@@ -124,18 +124,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!user_session) {
             window.location.href = "http://127.0.0.1:5500/index.html";
         } else {
-            const generos_peliculas = await obtenerDatosAPI(
-                "https://api.themoviedb.org/3/genre/movie/list?language=es",
-                "tmdb"
-            );
-            const generos_series = await obtenerDatosAPI(
-                "https://api.themoviedb.org/3/genre/tv/list?language=es",
-                "tmdb"
-            );
+            const generos_con_id = {
+                genres: [],
+            };
+
+            [
+                ...(
+                    await obtenerDatosAPI(
+                        "https://api.themoviedb.org/3/genre/movie/list?language=es",
+                        "tmdb"
+                    )
+                )["genres"],
+                ...(
+                    await obtenerDatosAPI(
+                        "https://api.themoviedb.org/3/genre/tv/list?language=es",
+                        "tmdb"
+                    )
+                )["genres"],
+            ].forEach((genero) => generos_con_id.genres.push(genero));
+
+            const generos = Array.from(
+                new Set(generos_con_id.genres.map((genero) => genero.name))
+            ).sort();
+
             const proveedores_peliculas = await obtenerDatosAPI(
                 "https://api.themoviedb.org/3/watch/providers/movie?language=es-MX",
                 "tmdb"
             );
+
             const proveedores_series = await obtenerDatosAPI(
                 "https://api.themoviedb.org/3/watch/providers/tv?language=es-MX",
                 "tmdb"
@@ -211,14 +227,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             // Función para convertir un elemento de texto a un input o select para editar
-            function habilitarEdicion(
-                p,
-                tipo,
-                opciones = null,
-                valorOriginal = null
-            ) {
+            function habilitarEdicion(p, tipo, opciones = null, valorOriginal = null) {
                 let elementoEditable;
-
+            
                 if (tipo === "input" || tipo === "date") {
                     elementoEditable = document.createElement("input");
                     elementoEditable.type = tipo;
@@ -230,42 +241,35 @@ document.addEventListener("DOMContentLoaded", async () => {
                         opciones,
                         p.getAttribute("valor")
                     );
+                } else if (tipo === "textarea") {
+                    elementoEditable = document.createElement("textarea");
+                    elementoEditable.value = p.textContent;
                 }
-
+            
                 p.replaceWith(elementoEditable);
                 elementoEditable.focus();
-
+            
                 // Al perder el foco, volver al elemento de texto
                 elementoEditable.addEventListener("blur", () => {
                     let selectedValue;
                     let selectedText;
-
+            
                     if (elementoEditable.type === "select" || elementoEditable.type === "select-one") {
                         selectedValue = elementoEditable.value;
-                        selectedText =
-                            elementoEditable.options[
-                                elementoEditable.selectedIndex
-                            ].text;
-                        // Si es un select para valoración, mostrar el contenido (estrellas) en lugar del valor
+                        selectedText = elementoEditable.options[elementoEditable.selectedIndex].text;
                         if (opciones === opcionesValoracion) {
-                            p.innerHTML = selectedText;  // Asegura que se muestre el contenido de texto (estrellas)
+                            p.innerHTML = selectedText; // Asegura que se muestre el contenido de texto (estrellas)
                         } else {
                             p.textContent = selectedValue;
                         }
                     } else if (elementoEditable.type === "date") {
                         selectedValue = elementoEditable.value;
-                        // Si no hay fecha seleccionada, mostrar "Pendiente por señalar"
-                        p.textContent = selectedValue
-                            ? selectedValue
-                            : "Pendiente por señalar";
+                        p.textContent = selectedValue ? selectedValue : "Pendiente";
                     } else {
                         selectedValue = elementoEditable.value;
-                        // Si el input está vacío, restaurar el valor original
-                        p.textContent = selectedValue
-                            ? selectedValue
-                            : valorOriginal;
+                        p.textContent = selectedValue ? selectedValue : valorOriginal;
                     }
-
+            
                     p.setAttribute("valor", selectedValue || valorOriginal); // Guardar el valor seleccionado o restaurar el original
                     elementoEditable.replaceWith(p);
                 });
@@ -277,7 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 procesos_de_usuario.forEach((proceso) => {
                     const proceso_cuerpo = document.createElement("form");
                     proceso_cuerpo.className = "flex wrap card j_sb";
-
+                    Aqui me quede
                     const svg_section = document.createElement("svg-section");
                     svg_section.className = "flex all_c relative";
 
@@ -327,13 +331,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     p_genero.setAttribute("valor", proceso.genero); // Guardar valor actual
 
                     p_genero.addEventListener("click", () => {
-                        habilitarEdicion(
-                            p_genero,
-                            "select",
-                            Array.from(generos_peliculas.genres).map(
-                                (g) => g.name
-                            )
-                        );
+                        habilitarEdicion(p_genero, "select", generos);
                     });
 
                     proces_hijo_1_genero.appendChild(h3_genero);
@@ -344,6 +342,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     const proces_2 = document.createElement("div");
                     proces_2.className = "proces_2 flex_col j_se";
+
+                    // Estado
+                    const proces_hijo_2_plataforma =
+                        document.createElement("div");
+                    proces_hijo_2_plataforma.className = "proces_hijo";
+                    const h3_plataforma = document.createElement("h3");
+                    h3_plataforma.textContent = "Plataforma";
+                    const p_plataforma = document.createElement("p");
+                    p_plataforma.textContent = proceso.plataforma;
+                    const p_plataforma_atributos = {
+                        required: "",
+                        list: "plataformas",
+                        name: "plataforma",
+                    };
+                    Object.entries(p_plataforma_atributos).forEach(
+                        ([clave, valor]) =>
+                            p_plataforma.setAttribute(clave, valor)
+                    );
+                    p_plataforma.setAttribute("valor", proceso.plataforma); // Guardar valor actual
+
+                    p_plataforma.addEventListener("click", () => {
+                        habilitarEdicion(p_plataforma, "input");
+                    });
+
+                    proces_hijo_2_plataforma.appendChild(h3_plataforma);
+                    proces_hijo_2_plataforma.appendChild(p_plataforma);
+                    proces_2.appendChild(proces_hijo_2_plataforma);
 
                     // Estado
                     const proces_hijo_2_estado = document.createElement("div");
@@ -391,7 +416,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     h3_fecha.textContent = "Fecha de terminación";
                     const p_fecha = document.createElement("p");
                     p_fecha.textContent =
-                        proceso.fecha || "Pendiente por señalar";
+                        proceso.fecha || "Pendiente";
 
                     p_fecha.addEventListener("click", () => {
                         habilitarEdicion(p_fecha, "date");
@@ -400,7 +425,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     proces_hijo_3_fecha.appendChild(h3_fecha);
                     proces_hijo_3_fecha.appendChild(p_fecha);
                     proces_3.appendChild(proces_hijo_3_fecha);
-                    debugger
+
                     // Valoración final
                     const proces_hijo_3_valoracion =
                         document.createElement("div");
@@ -409,7 +434,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     h3_valoracion.textContent = "Valoración Final";
                     const p_valoracion = document.createElement("p");
                     p_valoracion.innerHTML =
-                        opcionesValoracion[proceso.reseña] || "Por definir";
+                        opcionesValoracion[proceso.valoracion] || "Por definir";
                     p_valoracion.setAttribute(
                         "valor",
                         proceso.valoracion || "1"
@@ -426,6 +451,26 @@ document.addEventListener("DOMContentLoaded", async () => {
                     proces_hijo_3_valoracion.appendChild(h3_valoracion);
                     proces_hijo_3_valoracion.appendChild(p_valoracion);
                     proces_3.appendChild(proces_hijo_3_valoracion);
+
+                    const proces_hijo_3_resena = document.createElement("div");
+                    proces_hijo_3_resena.className = "proces_hijo";
+                    const h3_resena = document.createElement("h3");
+                    h3_resena.textContent = "Reseña personal";
+                    const q_resena = document.createElement("q");
+                    q_resena.textContent = proceso.resena || "Pendiente"; // Contenido de la reseña
+
+                    q_resena.addEventListener("click", () => {
+                        habilitarEdicion(
+                            q_resena,
+                            "textarea",
+                            null,
+                            proceso.resena || "Pendiente"
+                        );
+                    });
+
+                    proces_hijo_3_resena.appendChild(h3_resena);
+                    proces_hijo_3_resena.appendChild(q_resena);
+                    proces_3.appendChild(proces_hijo_3_resena);
 
                     proceso_cuerpo.appendChild(proces_3);
 
@@ -446,7 +491,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let nombre_genero = "";
                 const id = material_audiovisual.genre_ids[0];
                 if (id) {
-                    generos_peliculas.genres.some((genero) => {
+                    generos_con_id.genres.some((genero) => {
                         if (genero.id === Number(id)) {
                             nombre_genero = genero.name;
                             return true;
@@ -742,10 +787,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 genero = popup.querySelector("select[name='genero']");
                 formato = popup.querySelector("select[name='formato']");
                 boton_añadir_personalizado.classList.add("no_display");
-                debugger;
-                llenarGeneros(popup);
+                llenarSelect(genero, generos);
                 dropdown.textContent = "";
-                debugger;
                 if (origen.tagName === "LI") {
                     titulo.value = origen.getAttribute("titulo");
 
