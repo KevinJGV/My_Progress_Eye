@@ -183,7 +183,6 @@ header img {
 main {
     height: 100vh;
     flex-grow: 1;
-    gap: 8px;
 }
 
 #login {
@@ -235,7 +234,7 @@ input:focus {
 
 details {
     padding: 0 !important;
-    z-index: 1;
+    z-index: 15;
 }
 
 summary {
@@ -395,10 +394,6 @@ textarea {
     box-shadow: none;
 }
 
-main {
-    padding-top: 85.6px;
-}
-
 .button_exit:hover .load_bar_animation,
 .button_exit:active .load_bar_animation,
 .logo:hover .load_bar_animation,
@@ -413,6 +408,20 @@ article {
     overflow-x: hidden;
     overflow-y: auto;
     font-size: 0.8rem;
+    padding: 8px;
+    margin-top: 85.6px;
+}
+
+article section {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    cursor: default;
+    font-size: 2rem;
+    font-weight: bolder;
+    color: var(--font-color-sub);
 }
 
 form img {
@@ -424,12 +433,17 @@ img, svg {
     position: relative;
 }
 
+svg {
+    width: 60px;
+}
+
 article form {
     overflow-y: hidden;
     overflow-x: auto;
     padding: 0;
     padding: 0 !important;
     margin-top: 10px;
+    z-index: 5;
 }
 
 article form > *{
@@ -454,12 +468,12 @@ article p {
     cursor: text;
 }
 
-article p:hover {
-    color: gray;
+article p:hover, article q:hover {
     text-shadow: 2px 2px 2px var(--highligt), 0 0 1em var(--main-focus), 0 0 0.2em var(--main-focus);
+    font-weight: bold;
 }
 
-article p::after {
+article p::after, article q::after {
     content: url("assets/edit.svg");
     margin: 15px;
     cursor: pointer;
@@ -526,11 +540,15 @@ aside > * {
 
     main {
         flex-direction: column;
-        padding-top: 95px;
     }
 
     article {
         order: 1;
+        margin-top: 95px;
+    }
+
+    article form {
+        flex-direction: column;
     }
 
     article form > *{
@@ -540,10 +558,6 @@ aside > * {
 
     form img {
         max-width: 150px;
-    }
-
-    #filters {
-        order: 2;
     }
 
     #sections {
@@ -557,5 +571,11 @@ aside > * {
 
     svg {
         width: 50px;
+    }
+}
+
+@media (min-width: 1080px) {
+    article form div {
+        flex-direction: row !important;
     }
 }
