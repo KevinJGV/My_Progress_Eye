@@ -394,9 +394,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     const svg_section = document.createElement("svg-section");
                     svg_section.className = "flex all_c relative";
                     [svg_section,proceso_cuerpo].forEach(elem => elem.setAttribute("svg", proceso.formato));
-                    const load_bar = document.createElement("div");
-                    load_bar.className = "load_bar_animation absolute";
-                    svg_section.appendChild(load_bar);
 
                     const img = document.createElement("img");
                     img.className = "relative";

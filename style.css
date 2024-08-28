@@ -409,7 +409,7 @@ article {
     overflow-y: auto;
     font-size: 0.8rem;
     padding: 8px;
-    margin-top: 85.6px;
+    padding-top: 85.6px;
 }
 
 article section {
@@ -437,6 +437,10 @@ svg {
     width: 60px;
 }
 
+form svg {
+    margin: 5px;
+}
+
 article form {
     overflow-y: hidden;
     overflow-x: auto;
@@ -450,6 +454,7 @@ article form > *{
     padding: 20px;
     flex-grow: 1 ;
     flex-basis: min-content;
+    gap: 5px;
 }
 
 article form > :first-child,
@@ -457,10 +462,18 @@ article form > :last-child{
     padding: 0;
     margin: 0;
     border-radius: 0;
+}
+
+article form svg-section {
+    align-self: stretch !important;
+}
+
+article form > :last-child{
     flex-grow: 0 !important;
 }
 
-form:hover .load_bar_animation.absolute {
+form:hover .load_bar_animation.absolute,
+form:active .load_bar_animation.absolute {
 	right: 0%;
 }
 
