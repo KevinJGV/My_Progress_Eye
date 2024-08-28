@@ -212,7 +212,6 @@ input:focus {
 }
 
 .card {
-    max-height: 100%;
     background: var(--bg-color);
     border: 2px solid var(--main-color);
     box-shadow: 4px 4px var(--main-color);
@@ -466,6 +465,8 @@ article form > :last-child{
 
 article form svg-section {
     align-self: stretch !important;
+    justify-content: left !important;
+    flex-grow: 0 !important;
 }
 
 article form > :last-child{
@@ -490,6 +491,7 @@ article p::after, article q::after {
     content: url("assets/edit.svg");
     margin: 15px;
     cursor: pointer;
+    opacity: 0.3;
 }
 
 article p,article input, article select {
@@ -557,7 +559,6 @@ aside > * {
 
     article {
         order: 1;
-        margin-top: 95px;
     }
 
     article form {
@@ -587,7 +588,17 @@ aside > * {
     }
 }
 
-@media (min-width: 1080px) {
+@media (max-width: 780px) {
+    article form {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 1340px) {
+    article form > *{
+        align-items: center !important;
+    }
+
     article form div {
         flex-direction: row !important;
     }

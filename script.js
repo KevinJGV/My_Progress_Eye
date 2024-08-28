@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!user_session) {
             window.location.href = "http://127.0.0.1:5500/index.html";
         } else {
+
+            document.querySelector("title").textContent = `${localStorage.getItem("session_user_username")} - Dashboard`
             class svg_section extends HTMLElement {
                 constructor() {
                     super();
@@ -228,14 +230,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
             const procesos_de_usuario = usuario["process_items"];
 
-            if (procesos_de_usuario.length > 0)
-                document
-                    .querySelector("#salvapantallas")
-                    .classList.add("no_display");
+            const salvapantallas = document.querySelector("#salvapantallas");
+
+            if (procesos_de_usuario.length > 0) salvapantallas.textContent = "";
 
             const opcionesEstado = ["Pendiente", "En Curso", "Finalizado"];
             const opcionesFormato = [
-                "Seleccionar Formato...",
                 "Libros",
                 "Series",
                 "Películas",
@@ -348,6 +348,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     let selectedValue;
                     let selectedText;
+                    console.log(elementoEditable);
 
                     if (
                         elementoEditable.type === "select" ||
@@ -386,14 +387,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 procesos_de_usuario.forEach((proceso) => {
                     const proceso_cuerpo = document.createElement("form");
                     proceso_cuerpo.className = "flex wrap card j_sb relative";
-                    proceso_cuerpo.setAttribute("formato", proceso.formato)
+                    proceso_cuerpo.setAttribute("formato", proceso.formato);
                     proceso_cuerpo.setAttribute(
                         "i",
                         procesos_de_usuario.indexOf(proceso)
                     );
                     const svg_section = document.createElement("svg-section");
                     svg_section.className = "flex all_c relative";
-                    [svg_section,proceso_cuerpo].forEach(elem => elem.setAttribute("svg", proceso.formato));
+                    [svg_section, proceso_cuerpo].forEach((elem) =>
+                        elem.setAttribute("svg", proceso.formato)
+                    );
 
                     const img = document.createElement("img");
                     img.className = "relative";
@@ -403,8 +406,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     proceso_cuerpo.appendChild(svg_section);
 
+                    const proces_classlist = "flex_col j_se"
+
                     const proces_1 = document.createElement("div");
-                    proces_1.className = "proces_1 flex_col j_se";
+                    proces_1.className = proces_classlist;
 
                     // Título
                     const proces_hijo_1_titulo = document.createElement("div");
@@ -449,7 +454,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     proceso_cuerpo.appendChild(proces_1);
 
                     const proces_2 = document.createElement("div");
-                    proces_2.className = "proces_2 flex_col j_se";
+                    proces_2.className = proces_classlist;
 
                     // Estado
                     const proces_hijo_2_plataforma =
@@ -518,7 +523,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     proceso_cuerpo.appendChild(proces_2);
 
                     const proces_3 = document.createElement("div");
-                    proces_3.className = "proces_3 flex_col j_se";
+                    proces_3.className = proces_classlist;
 
                     // Fecha de terminación
                     const proces_hijo_3_fecha = document.createElement("div");
@@ -839,7 +844,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     paltaforma.value = origen.getAttribute("plataforma");
 
                     formato.value = origen.getAttribute("formato");
-                    if (origen.querySelector("img")) imagen.value = origen.querySelector("img").src;
+                    if (origen.querySelector("img"))
+                        imagen.value = origen.querySelector("img").src;
 
                     [titulo, genero, paltaforma, formato].forEach((input) =>
                         input.value
@@ -927,21 +933,57 @@ document.addEventListener("DOMContentLoaded", async () => {
                     window.location.reload();
                 });
 
-            document.querySelector("svg-section[svg='logout']").addEventListener("click", () => {
-                localStorage.clear();
-                window.location.reload();
-            })
+            Object.entries(
+                document.querySelector("#sections").children
+            ).forEach(([clave, valor]) => {
+                clave = Number(clave);
+                valor.addEventListener("click", () => {
+                    const article_length = document.querySelector("article").children
+                    .length
+                    salvapantallas.textContent = "";
+                    const filtro = valor.getAttribute("svg");
+                    let contador = 1;
+                    if (clave !== 0 && clave !== 4) {
+                        Object.entries(
+                            document.querySelector("article").children
+                        ).forEach(([clave, valor]) => {
+                            if (valor.getAttribute("formato") !== filtro && valor.tagName !== "SECTION") {
+                                valor.classList.add("no_display");
+                                contador++;
+                            } else {
+                                valor.classList.remove("no_display");
+                            }
+                            if (
+                                article_length === contador
+                            )
+                                salvapantallas.textContent =
+                                    "No tienes procesos en ésta categoria.";
+                        });
+                    } else if (clave === 0) {
+                        Object.entries(
+                            document.querySelector("article").children
+                        ).forEach(([clave, valor]) =>
+                            valor.classList.remove("no_display")
+                        );
+                        if (article_length <= 1) salvapantallas.textContent = "Sin progresos en tu vida, cambia ;)"
+                    }
+                });
+            });
+
+            document
+                .querySelector("svg-section[svg='logout']")
+                .addEventListener("click", () => {
+                    localStorage.clear();
+                    window.location.reload();
+                });
 
             // Función que se ejecutará según la cantidad de hijos del elemento observado
             function evaluarCantidadDeHijos(elemento) {
                 if (elemento.children.length > 1) {
-                    document
-                        .querySelector("#salvapantallas")
-                        .classList.add("no_display");
+                    salvapantallas.textContent = "";
                 } else {
-                    document
-                        .querySelector("#salvapantallas")
-                        .classList.remove("no_display");
+                    salvapantallas.textContent =
+                        "Sin progresos en tu vida, cambia ;)";
                 }
             }
 
