@@ -372,7 +372,7 @@ async function inicializarPagina() {
         manejarPaginaIndex();
     } else {
         if (!sesionUsuario) {
-            window.location.href = "http://127.0.0.1:5500/index.html";
+            window.location.href = "/index.html";
         } else {
             await manejarPaginaSesion();
         }
@@ -390,7 +390,7 @@ async function manejarPaginaIndex() {
         document.querySelector("header").style.flexGrow = 1;
         elementoCargador.style.right = "0%";
         setTimeout(() => {
-            window.location.href = "http://127.0.0.1:5500/session.html";
+            window.location.href = "/session.html";
         }, 1500);
     }
 }
