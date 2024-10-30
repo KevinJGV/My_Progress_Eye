@@ -390,7 +390,7 @@ async function manejarPaginaIndex() {
         document.querySelector("header").style.flexGrow = 1;
         elementoCargador.style.right = "0%";
         setTimeout(() => {
-            window.location.href = "/session.html";
+            window.location.href = "session.html";
         }, 1500);
     }
 }
