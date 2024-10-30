@@ -292,7 +292,7 @@ async function buscarContenido(valor) {
 
 function cargarPantallaAgregar(origen) {
     botonAnadirPersonalizado.classList.add("no_display");
-    llenarSelect(genero,Array.from(new Set(generosConId.genres.map(g => g.name))).sort());
+    llenarSelect(genero, Array.from(new Set(generosConId.genres.map(g => g.name))).sort());
     llenarDatalist();
     dropdown.textContent = "";
     if (origen.tagName === "LI") {
@@ -344,7 +344,7 @@ function filtrarProcesos(filtro) {
     Array.from(articulo.children).forEach(elemento => {
         if (filtro === "todos" || elemento.getAttribute("formato") === filtro || elemento.tagName === "SECTION") {
             elemento.classList.remove("no_display");
-            
+
         } else {
             elemento.classList.add("no_display");
             contador++;
@@ -352,27 +352,27 @@ function filtrarProcesos(filtro) {
     });
 
     if (contador + 1 === articulo.children.length) {
-        salvapantallas.textContent = filtro === "todos" ? 
-            "Sin progresos en tu vida, cambia ;)" : 
+        salvapantallas.textContent = filtro === "todos" ?
+            "Sin progresos en tu vida, cambia ;)" :
             "No tienes procesos en esta categoría.";
     }
 }
 
 function evaluarCantidadDeHijos(elemento) {
     const salvapantallas = document.querySelector("#salvapantallas");
-    salvapantallas.textContent = elemento.children.length > 1 ? 
-        "" : 
+    salvapantallas.textContent = elemento.children.length > 1 ?
+        "" :
         "Sin progresos en tu vida, cambia ;)";
 }
 
 async function inicializarPagina() {
     sesionUsuario = localStorage.getItem("session_user_username");
-    
+
     if (URL.pathname.includes("index")) {
         manejarPaginaIndex();
     } else {
         if (!sesionUsuario) {
-            window.location.href = "/index.html";
+            window.location.href = "My_Progress_Eye/index.html";
         } else {
             await manejarPaginaSesion();
         }
@@ -382,7 +382,7 @@ async function inicializarPagina() {
 async function manejarPaginaIndex() {
     const elementoCargador = document.querySelector(".load_bar_animation");
     elementoCargador.removeAttribute("style");
-    
+
     if (!sesionUsuario) {
         document.querySelector("#login").addEventListener("submit", manejarInicioSesion);
     } else {
@@ -400,10 +400,10 @@ async function manejarInicioSesion(e) {
     const formData = new FormData(e.target);
     const formObject = Object.fromEntries(formData.entries());
     formObject.username = formObject.username.toLowerCase();
-    
+
     const usuariosMockAPI = await solicitarAPI(MOCKAPI_URL_BASE);
     let usuarioEncontrado = usuariosMockAPI.find(u => u.username === formObject.username);
-    
+
     if (usuarioEncontrado) {
         formObject.id = usuarioEncontrado.id;
         await enviarAPI(MOCKAPI_URL_BASE + formObject.id, formObject, "PUT");
@@ -411,7 +411,7 @@ async function manejarInicioSesion(e) {
         formObject.id = usuariosMockAPI.length + 1;
         await enviarAPI(MOCKAPI_URL_BASE, formObject);
     }
-    
+
     localStorage.setItem("session_user_id", formObject.id);
     localStorage.setItem("session_user_username", formObject.username);
     location.reload();
@@ -436,12 +436,12 @@ function definirComponenteSVG() {
             const SVG = this.getAttribute("svg");
             const animacion = document.createElement("div");
             const colores = [
-                "fuchsia", "lime", "yellow", "blue", "aqua", "orange", "hotpink", 
-                "lawngreen", "cyan", "magenta", "springgreen", "dodgerblue", "deeppink", 
-                "chartreuse", "mediumspringgreen", "limegreen", "crimson", "tomato", 
-                "gold", "coral", "orangered", "greenyellow", "mediumturquoise", "royalblue", 
-                "mediumorchid", "mediumpurple", "yellowgreen", "turquoise", "mediumvioletred", 
-                "darkorange", "lightskyblue", "palevioletred", "mediumseagreen", "violet", 
+                "fuchsia", "lime", "yellow", "blue", "aqua", "orange", "hotpink",
+                "lawngreen", "cyan", "magenta", "springgreen", "dodgerblue", "deeppink",
+                "chartreuse", "mediumspringgreen", "limegreen", "crimson", "tomato",
+                "gold", "coral", "orangered", "greenyellow", "mediumturquoise", "royalblue",
+                "mediumorchid", "mediumpurple", "yellowgreen", "turquoise", "mediumvioletred",
+                "darkorange", "lightskyblue", "palevioletred", "mediumseagreen", "violet",
                 "salmon", "sandybrown", "darkcyan", "mediumslateblue", "goldenrod", "#3b82f6", "#8b5df6"
             ];
             animacion.style.backgroundColor = SVG === "logout" ? "red" : colores[Math.floor(Math.random() * colores.length)];
@@ -497,25 +497,25 @@ function crearElementoProceso(proceso, index) {
         bloque.forEach(seccion => {
             const divSeccion = document.createElement('div');
             divSeccion.className = "proces_hijo";
-            
+
             const h3 = document.createElement('h3');
             h3.textContent = seccion.charAt(0).toUpperCase() + seccion.slice(1);
-            
+
             const elemento = seccion === 'reseña' ? document.createElement('q') : document.createElement('p');
             elemento.setAttribute("seccion", seccion);
             elemento.textContent = proceso[seccion] || (seccion === 'fecha' ? 'Pendiente' : '');
-            
+
             if (seccion === 'valoracion') {
                 elemento.innerHTML = opcionesValoracion[proceso[seccion]] || "Por definir";
             }
-            
+
             elemento.setAttribute("valor", proceso[seccion] || "");
 
             elemento.addEventListener("click", () => {
-                
+
                 let tipo = "input";
                 let opciones = null;
-                
+
                 if (seccion === 'estado') {
                     tipo = "select";
                     opciones = opcionesEstado;
