@@ -372,7 +372,7 @@ async function inicializarPagina() {
         manejarPaginaIndex();
     } else {
         if (!sesionUsuario) {
-            window.location.href = "My_Progress_Eye/index.html";
+            window.location.href = "index.html";
         } else {
             await manejarPaginaSesion();
         }
