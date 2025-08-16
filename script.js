@@ -186,7 +186,7 @@ async function obtenerPlataforma(materialAudiovisual, tipo) {
 
 async function obtenerArchivoTexto(nombre, extension) {
     try {
-        const response = await fetch(`assets/${nombre}.${extension}`);
+        const response = await fetch(`./assets/${nombre}.${extension}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -471,6 +471,7 @@ function definirComponenteSVG() {
             this.appendChild(animacion);
             
             try {
+                debugger
                 const svgContent = await obtenerArchivoTexto(SVG, "svg");
                 
                 const tempDiv = document.createElement('div');

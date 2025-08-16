@@ -254,7 +254,7 @@ summary::marker {
 }
 
 #search {
-    background-image: url("assets/search.svg");
+    background-image: url("./assets/search.svg");
     margin-block: 1rem 0;
 }
 
@@ -490,7 +490,7 @@ article p:hover, article q:hover {
 }
 
 article p::after, article q::after {
-    content: url("assets/edit.svg");
+    content: url("./assets/edit.svg");
     margin: 15px;
     cursor: pointer;
     opacity: 0.3;
