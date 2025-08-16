@@ -509,6 +509,54 @@ svg-section:active svg {
     transform: scale(1.15);
 }
 
+svg-section[data-title] {
+    position: relative;
+}
+
+svg-section[data-title]:hover::before {
+    content: attr(data-title);
+    position: absolute;
+    right: 120%;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--main-hardcolor);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeInTooltip 0.3s ease-in-out forwards;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+svg-section[data-title]:hover::after {
+    content: '';
+    position: absolute;
+    right: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: var(--main-hardcolor);
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeInTooltip 0.3s ease-in-out forwards;
+    pointer-events: none;
+}
+
+@keyframes fadeInTooltip {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
 aside > * {
     cursor: pointer;
 }
@@ -549,6 +597,17 @@ aside > * {
     div:active .load_bar_animation,
     svg-section:active .load_bar_animation {
         opacity: 1;
+    }
+
+    svg-section[data-title]:hover::before {
+        right: 130%;
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        transform: translateY(-50%);
+    }
+    
+    svg-section[data-title]:hover::after {
+        right: 120%;
     }
 
     #dropdown {

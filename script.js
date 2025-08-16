@@ -185,7 +185,24 @@ async function obtenerPlataforma(materialAudiovisual, tipo) {
 }
 
 async function obtenerArchivoTexto(nombre, extension) {
-    return await fetch(`/assets/${nombre}.${extension}`).then(res => res.text());
+    try {
+        const response = await fetch(`assets/${nombre}.${extension}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        let content = await response.text();
+        
+        if (extension === 'svg') {
+            content = content.replace(/<\?xml[^>]*\?>/g, '');
+            content = content.replace(/<!--[\s\S]*?-->/g, '');
+            content = content.trim();
+        }
+        
+        return content;
+    } catch (error) {
+        console.error(`Error al cargar archivo ${nombre}.${extension}:`, error);
+        throw error;
+    }
 }
 
 async function crearElementoLi(materialAudiovisual, tipo) {
@@ -427,6 +444,10 @@ async function manejarPaginaSesion() {
 }
 
 function definirComponenteSVG() {
+    if (customElements.get("svg-section")) {
+        return;
+    }
+
     class SVGSection extends HTMLElement {
         constructor() {
             super();
@@ -434,6 +455,7 @@ function definirComponenteSVG() {
 
         async connectedCallback() {
             const SVG = this.getAttribute("svg");
+            
             const animacion = document.createElement("div");
             const colores = [
                 "fuchsia", "lime", "yellow", "blue", "aqua", "orange", "hotpink",
@@ -447,10 +469,47 @@ function definirComponenteSVG() {
             animacion.style.backgroundColor = SVG === "logout" ? "red" : colores[Math.floor(Math.random() * colores.length)];
             animacion.classList.add("load_bar_animation", "absolute");
             this.appendChild(animacion);
-            this.insertAdjacentHTML("beforeend", await obtenerArchivoTexto(SVG, "svg"));
+            
+            try {
+                const svgContent = await obtenerArchivoTexto(SVG, "svg");
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = svgContent;
+                const svgElement = tempDiv.querySelector('svg');
+                
+                if (svgElement) {
+                    let titleText = svgElement.getAttribute('data-title') || '';
+                    
+                    if (!titleText) {
+                        titleText = SVG.charAt(0).toUpperCase() + SVG.slice(1);
+                    }
+                    
+                    const svgClone = svgElement.cloneNode(true);
+                    this.appendChild(svgClone);
+                    
+                    if (titleText) {
+                        this.setAttribute('data-title', titleText);
+                    }
+                } else {
+                    throw new Error('No se encontró elemento SVG válido');
+                }
+                
+            } catch (error) {
+                console.error(`Error cargando SVG ${SVG}:`, error);
+                const fallbackText = document.createElement("span");
+                fallbackText.textContent = SVG.charAt(0).toUpperCase() + SVG.slice(1);
+                fallbackText.style.color = "white";
+                fallbackText.style.fontSize = "12px";
+                this.appendChild(fallbackText);
+            }
         }
     }
-    customElements.define("svg-section", SVGSection);
+    
+    try {
+        customElements.define("svg-section", SVGSection);
+    } catch (error) {
+        console.error("Error definiendo svg-section:", error);
+    }
 }
 
 async function cargarProcesos() {
